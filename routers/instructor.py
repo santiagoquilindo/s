@@ -111,3 +111,11 @@ def login():
             flash("Credenciales incorrectas", "danger")  
 
     return render_template('login.html', estado=estado, mensaje=mensaje)
+
+
+
+@app.route('/logout')
+def logout():
+    session.pop('usuario_id', None)
+    flash("Has cerrado sesión exitosamente", "success")
+    return redirect(url_for('login'))
