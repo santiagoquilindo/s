@@ -1,7 +1,18 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const today = new Date().toISOString().split("T")[0];
+  const fechaInput = document.getElementById("fecha");
+  fechaInput.value=today;
+  fechaInput.readOnly=true;
+});
+
+
 document
   .getElementById("formGuia")
   .addEventListener("submit", function (event) {
     event.preventDefault();
+
+
+
 
     const form = document.getElementById("formGuia");
     const formData = new FormData(form);
@@ -18,3 +29,6 @@ document
         const alertContainer = doc.querySelector("#alert-container");
       });
   });
+
+
+  

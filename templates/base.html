@@ -10,6 +10,8 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
   </head>
   <body>
@@ -23,6 +25,7 @@
     <script src="../static/js/agregarsena.js"></script>
     <script src="../static/js/agregarguia.js"></script>
     <script src="../static/js/agregarintructor.js"></script>
+    <script src="../static/js/agregarprograma.js"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

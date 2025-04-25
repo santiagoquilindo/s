@@ -9,8 +9,13 @@
     <label>Descripción:</label>
     <input type="text" name="descripcions" id="descripcions" required /><br /><br />
     
-    <label>Programa de Formación:</label>
-    <input type="text" name="programaformacion" id="programaformacion" required /><br /><br />
+    <label for="programaformacion">Programa de Formación:</label>
+    <select name="programaformacion" id="programaformacion" required>
+      <option value="">-- Selecciona un programa --</option>
+      {% for prog in programa %}
+      <option value="{{ prog.id }}">{{ prog.nombre }}</option>
+      {% endfor %}</select
+    ><br /><br />
     
     <label>Documento:</label>
     <input type="file" name="documento" id="documento" accept="application/pdf" required /><br /><br />

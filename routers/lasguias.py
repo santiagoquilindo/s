@@ -1,8 +1,10 @@
 from flask import render_template, request,send_from_directory,session,redirect,url_for,flash
 from models.guia import NombreGuia
 from models.instructor import Instructor
+from models.programasFormacion import Programa
 from app import app
 from werkzeug.utils import secure_filename
+from datetime import datetime
 import os
 import traceback
 
@@ -32,6 +34,7 @@ def agregar_guia():
         mensaje = None
         estado = False
         instructores = Instructor.objects()
+        programa = Programa.objects()
         if request.method == 'POST':
             try:
                 if 'documento' not in request.files:
@@ -47,15 +50,18 @@ def agregar_guia():
                     documento.save(filepath)
                     nombreguia = request.form.get("nombreguia")
                     descripcions = request.form.get("descripcions")
-                    programaformacion = request.form.get("programaformacion")
-                    fecha = request.form.get("fecha")
+                    programa_id = request.form.get("programaformacion")
+                    programa_ref = Programa.objects(id=programa_id).first()
+                    fecha_str = request.form.get("fecha")
+                    fecha=datetime.strptime(fecha_str, '%Y-%m-%d') if fecha_str else None
                     instructor_id = request.form.get("intructordeproceso")
                     instructor_ref = Instructor.objects(id=instructor_id).first()
                     if instructor_ref:
                         nueva_guia = NombreGuia(
                             nombreguia=nombreguia,
                             descripcions=descripcions,
-                            programaformacion=programaformacion,
+                            programaformacion=programa_ref.nombre,
+                            programa=programa_ref,
                             documento=filename,
                             fecha=fecha,
                             intructordeproceso=instructor_ref
@@ -72,9 +78,27 @@ def agregar_guia():
                 print("Error real al guardar la guía:")
                 traceback.print_exc()
                 mensaje = f"Error al guardar la guía: {str(e)}"
-        return render_template("agregarguia.html", mensaje=mensaje, estado=estado, instructores=instructores)
+        return render_template("agregarguia.html", mensaje=mensaje, estado=estado, instructores=instructores,programa=programa)
 
 
 @app.route('/uploads/pdf/<path:filename>')
 def download_file(filename):
     return send_from_directory('uploads/pdf', filename)
+
+
+@app.route("/agregarprograma/",methods=['GET', 'POST'])
+def AgregarElPrograma():
+    try:
+        mensaje=None
+        estado=False
+        if request.method=='POST':
+            datos=request.get_json(force=True)
+            genero=programa(**datos)
+            genero.save()
+            estado=True
+            mensaje="Sena Agregado correctamente"
+        else:
+            mensaje="No permitido"
+    except Exception as error:
+        mensaje=str(error)
+    return render_template('agregarprograma.html',estado=estado,mensaje=mensaje)
